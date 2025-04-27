@@ -5,7 +5,7 @@ from aiogram.types import WebAppInfo, InlineKeyboardButton, InlineKeyboardMarkup
 from aiogram.enums import ParseMode
 from aiogram.client.default import DefaultBotProperties
 
-API_TOKEN = '7209339260:AAEOWJsT7pXiYf2n7NYN2l_Kv1qEag6lZ4Q'
+API_TOKEN = '7209339260:AAE8jh5r-qRyUQiTDsd8wtQaCUYWohWcxbk'
 WEBAPP_URL = 'https://vladislav01192007.github.io/alt-miner-webapp/'
 
 # Налаштування логування
