@@ -6,7 +6,7 @@ from aiogram.types import Message, WebAppInfo, InlineKeyboardButton, InlineKeybo
 from aiogram.enums import ParseMode
 from aiogram.client.default import DefaultBotProperties
 
-API_TOKEN = '7209339260:AAE8jh5r-qRyUQiTDsd8wtQaCUYWohWcxbk'
+API_TOKEN = '7646902024:AAHyk78PJU5ulvUs2Nc48Qz7gcwM2EUOOsg'
 WEBAPP_URL = 'https://vladislav01192007.github.io/alt-miner-webapp/'
 WEBHOOK_PATH = '/webhook'
 WEBHOOK_URL = 'https://python-bot-1-33f9.onrender.com' + WEBHOOK_PATH
