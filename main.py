@@ -9,7 +9,7 @@ from aiohttp import web
 API_TOKEN = '7209339260:AAE8jh5r-qRyUQiTDsd8wtQaCUYWohWcxbk'
 WEBAPP_URL = 'https://vladislav01192007.github.io/alt-miner-webapp/'
 WEBHOOK_PATH = '/webhook'
-WEBHOOK_URL = '//https://python-bot-1-33f9.onrender.com' + WEBHOOK_PATH
+WEBHOOK_URL = 'https://python-bot-1-33f9.onrender.com' + WEBHOOK_PATH
 
 # Налаштування логування
 logging.basicConfig(level=logging.INFO)
