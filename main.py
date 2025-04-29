@@ -1,10 +1,10 @@
 import asyncio
 import logging
+from aiohttp import web
 from aiogram import Bot, Dispatcher, F
-from aiogram.types import Message, WebAppInfo, InlineKeyboardButton, InlineKeyboardMarkup, ReplyKeyboardRemove
+from aiogram.types import Message, WebAppInfo, InlineKeyboardButton, InlineKeyboardMarkup, ReplyKeyboardRemove, Update
 from aiogram.enums import ParseMode
 from aiogram.client.default import DefaultBotProperties
-from aiohttp import web
 
 API_TOKEN = '7209339260:AAE8jh5r-qRyUQiTDsd8wtQaCUYWohWcxbk'
 WEBAPP_URL = 'https://vladislav01192007.github.io/alt-miner-webapp/'
@@ -37,24 +37,28 @@ async def hide_keyboard(message: Message):
 
 # ===== Webhook сервер =====
 async def handle_webhook(request):
-    update = await request.json()
+    data = await request.json()
+    update = Update.model_validate(data)
     await dp.feed_update(bot, update)
     return web.Response()
 
 async def main():
+    # Створюємо aiohttp веб-сервер
     app = web.Application()
     app.router.add_post(WEBHOOK_PATH, handle_webhook)
 
+    # Встановлюємо webhook
     await bot.set_webhook(WEBHOOK_URL)
 
+    # Запускаємо сервер на порту 10000 (Render специфіка)
     runner = web.AppRunner(app)
     await runner.setup()
-    site = web.TCPSite(runner, "0.0.0.0", 10000)  # Порт 10000 для Render
+    site = web.TCPSite(runner, "0.0.0.0", 10000)
     await site.start()
 
     logging.info(f"Webhook listening on {WEBHOOK_URL}")
 
-    # Безкінечний цикл
+    # Тримаємо процес живим
     while True:
         await asyncio.sleep(3600)
 
