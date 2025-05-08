@@ -39,17 +39,6 @@ def update_user_alt(user_id: int, amount: int):
     save_data(data)
     return data[user_id_str]
 
-def convert_alt_to_altst(user_id: int):
-    data = load_data()
-    user_id_str = str(user_id)
-    alt = data.get(user_id_str, 0)
-    if alt < 10:
-        return (False, alt)
-    altst = alt // 10
-    data[user_id_str] = alt % 10
-    save_data(data)
-    return (True, altst)
-
 # === Хендлери ===
 @dp.message(F.text == "/start")
 async def send_welcome(message: Message):
@@ -71,38 +60,10 @@ async def hide_keyboard(message: Message):
 async def handle_webapp_data(message: Message):
     try:
         alt = int(message.web_app_data.data)
-        total = update_user_alt(message.from_user.id, alt)
-        await message.answer(f"✅ Ви надіслали <b>{alt}</b> ALT!\n🔄 Загальний баланс: <b>{total}</b> ALT")
+        update_user_alt(message.from_user.id, alt)
+        # Не відповідаємо нічого — просто зберігаємо ALT
     except Exception as e:
-        await message.answer(f"❌ Помилка: {e}")
-
-@dp.message(F.text == "/wallet")
-async def wallet_handler(message: Message):
-    data = load_data()
-    user_id_str = str(message.from_user.id)
-    alt = data.get(user_id_str, 0)
-
-    keyboard = InlineKeyboardMarkup(
-        inline_keyboard=[
-            [InlineKeyboardButton(text="💱 Обміняти ALT → ALTST", callback_data="convert_alt")]
-        ]
-    )
-
-    await message.answer(
-        f"👛 <b>Ваш гаманець</b>\n🔹 ALT: <b>{alt}</b>\n🔸 ALTST: натисніть кнопку нижче для обміну",
-        reply_markup=keyboard
-    )
-
-@dp.callback_query(F.data == "convert_alt")
-async def convert_callback(callback):
-    user_id = callback.from_user.id
-    success, result = convert_alt_to_altst(user_id)
-    if success:
-        await callback.message.edit_text(
-            f"✅ Ви обміняли ALT на <b>{result} ALTST</b>!\nРешта ALT: <b>{load_data().get(str(user_id), 0)}</b>"
-        )
-    else:
-        await callback.answer("❌ Потрібно мінімум 10 ALT для обміну!", show_alert=True)
+        logging.error(f"❌ Помилка обробки ALT: {e}")
 
 # === Webhook сервер ===
 async def handle_webhook(request):
@@ -114,16 +75,12 @@ async def handle_webhook(request):
 async def main():
     app = web.Application()
     app.router.add_post(WEBHOOK_PATH, handle_webhook)
-
     await bot.set_webhook(WEBHOOK_URL)
-
     runner = web.AppRunner(app)
     await runner.setup()
     site = web.TCPSite(runner, "0.0.0.0", 10000)
     await site.start()
-
     logging.info(f"Webhook listening on {WEBHOOK_URL}")
-
     while True:
         await asyncio.sleep(3600)
 
