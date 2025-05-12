@@ -56,12 +56,20 @@ async def send_welcome(message: Message):
 async def hide_keyboard(message: Message):
     await message.answer("Меню приховано ✅", reply_markup=ReplyKeyboardRemove())
 
+@dp.message(F.text == "/ref")
+async def referral_link(message: Message):
+    bot_user = await bot.get_me()
+    username = bot_user.username
+    user_id = message.from_user.id
+    ref_link = f"https://t.me/{username}?start={user_id}"
+    await message.answer(f"🎁 Запроси друзів та отримай ALT!\nОсь твоє посилання:\n<code>{ref_link}</code>")
+
 @dp.message(F.web_app_data)
 async def handle_webapp_data(message: Message):
     try:
         alt = int(message.web_app_data.data)
         update_user_alt(message.from_user.id, alt)
-        # Не відповідаємо нічого — просто зберігаємо ALT
+        # Тихо оброблюємо ALT
     except Exception as e:
         logging.error(f"❌ Помилка обробки ALT: {e}")
 
