@@ -10,7 +10,7 @@ from aiogram.client.default import DefaultBotProperties
 
 # === Конфігурація ===
 API_TOKEN = '7646902024:AAHyk78PJU5ulvUs2Nc48Qz7gcwM2EUOOsg'
-WEBAPP_URL = 'https://vladislav01192007.github.io/alt-miner-webapp/'
+WEBAPP_URL = 'https://vladislav01192007.github.io/alt-miner-webapp/?startapp=1&request_write_access=true'
 WEBHOOK_PATH = '/webhook'
 WEBHOOK_URL = 'https://python-bot-1-33f9.onrender.com' + WEBHOOK_PATH
 DATA_FILE = "user_data.json"
@@ -49,7 +49,6 @@ def add_referral(referrer_id: str, referred_id: str):
     if referred_id not in referrals:
         referrals.append(referred_id)
         referrer["referrals"] = referrals
-        # бонус
         referrer["alt"] = referrer.get("alt", 0) + 100
         data[referrer_id] = referrer
         save_data(data)
